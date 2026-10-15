@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memo Chat</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'memos/style.css' %}">
+</head>
+
+<body>
+    <h1>Memo</h1>
+    <h2>マイカテゴリー</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="category_name" placeholder="カテゴリー名">
+        <button type="submit">追加</button>
+    </form>
+
+    <div class="category-list">
+        {% for category in categories %}
+        <div class="category-item">
+            <a href="{% url 'category_detail' category.id %}" class="category-card">
+                {{ category.name }}
+            </a>
+
+            <form method="POST" action="{% url 'delete_category' category.id %}"
+                onsubmit="return confirm('このカテゴリーと中のメッセージをすべて削除しますか？');">
+                {% csrf_token %}
+                <button type="submit">削除</button>
+            </form>
+        </div>
+        {% empty %}
+        <p>カテゴリーはまだありません。</p>
+        {% endfor %}
+    </div>
+
+</body>
+
+</html>

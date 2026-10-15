@@ -1,0 +1,178 @@
+```html
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category.name }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'memos/style.css' %}">
+</head>
+
+<body>
+    <div class="page-header">
+        <h1>{{ category.name }}</h1>
+        <a href="{% url 'home' %}">カテゴリー一覧に戻る</a>
+        <form method="GET" class="memo-search">
+            <input type="search" name="q" value="{{ keyword }}" placeholder="メモを検索...">
+            <button type="submit">検索</button>
+
+            {% if keyword %}
+            <a href="{% url 'category_detail' category.id %}">検索解除</a>
+            {% endif %}
+        </form>
+    </div>
+
+
+
+    <div class="memo-list">
+        {% for memo in memos %}
+        <div class="memo-item">
+            <div class="memo-bubble" data-memo-id="{{ memo.id }}">
+                {{ memo.content }}
+            </div>
+            <div class="memo-date">
+                {{ memo.created_at|date:"Y/m/d H:i" }}
+            </div>
+        </div>
+        {% empty %}
+        <p>
+            {% if keyword %}
+            「{{ keyword }}」に一致するメモはありません。
+            {% else %}
+            メッセージはまだありません。
+            {% endif %}
+        </p>
+        {% endfor %}
+    </div>
+
+    <form method="POST" class="message-form">
+        {% csrf_token %}
+        <textarea name="content" placeholder="メッセージを入力..." required></textarea>
+        <button type="submit">投稿</button>
+    </form>
+
+    <script>
+        const messageForm = document.querySelector(".message-form");
+        const messageInput = document.querySelector('textarea[name="content"]');
+
+        messageInput.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                messageForm.requestSubmit();
+            }
+        });
+    </script>
+
+    <div id="message-menu" class="context-menu">
+        <button type="button" id="delete-message">削除</button>
+    </div>
+
+    <form id="delete-message-form" method="POST" style="display: none;">
+        {% csrf_token %}
+    </form>
+
+    <form id="delete-selected-form" method="POST" action="{% url 'delete_selected_memos' category.id %}"
+        style="display: none;">
+        {% csrf_token %}
+    </form>
+
+    <script>
+        const messageMenu = document.querySelector("#message-menu");
+        const deleteButton = document.querySelector("#delete-message");
+        const deleteForm = document.querySelector("#delete-message-form");
+        const deleteSelectedForm = document.querySelector("#delete-selected-form");
+
+        let selectedMemoId = null;
+        const selectedMemoIds = new Set();
+
+        const memoBubbles = document.querySelectorAll(".memo-bubble");
+
+        memoBubbles.forEach(function (bubble) {
+            bubble.addEventListener("click", function (event) {
+                if (!event.ctrlKey) return;
+
+                event.preventDefault();
+
+                const memoId = bubble.dataset.memoId;
+
+                if (selectedMemoIds.has(memoId)) {
+                    selectedMemoIds.delete(memoId);
+                    bubble.classList.remove("memo-selected");
+                } else {
+                    selectedMemoIds.add(memoId);
+                    bubble.classList.add("memo-selected");
+                }
+            });
+
+            bubble.addEventListener("contextmenu", function (event) {
+                event.preventDefault();
+
+                selectedMemoId = bubble.dataset.memoId;
+
+                // 複数選択中で、右クリックしたメモも選択済みなら、
+                // 選択したメモをまとめて削除できるようにする
+                if (!selectedMemoIds.has(selectedMemoId)) {
+                    selectedMemoIds.clear();
+
+                    memoBubbles.forEach(function (item) {
+                        item.classList.remove("memo-selected");
+                    });
+
+                    selectedMemoIds.add(selectedMemoId);
+                    bubble.classList.add("memo-selected");
+                }
+
+                messageMenu.style.left = event.clientX + "px";
+                messageMenu.style.top = event.clientY + "px";
+                messageMenu.style.display = "block";
+            });
+        });
+
+        deleteButton.addEventListener("click", function () {
+            if (selectedMemoIds.size === 0) return;
+
+            const count = selectedMemoIds.size;
+            const message = count === 1
+                ? "このメッセージを削除しますか？"
+                : count + "件のメッセージをまとめて削除しますか？";
+
+            if (confirm(message)) {
+                if (count === 1) {
+                    deleteForm.action =
+                        "{% url 'delete_memo' category.id 0 %}".replace(
+                            "/memo/0/delete/",
+                            "/memo/" + selectedMemoId + "/delete/"
+                        );
+
+                    deleteForm.requestSubmit();
+                } else {
+                    selectedMemoIds.forEach(function (memoId) {
+                        const input = document.createElement("input");
+                        input.type = "hidden";
+                        input.name = "memo_ids";
+                        input.value = memoId;
+                        deleteSelectedForm.appendChild(input);
+                    });
+
+                    deleteSelectedForm.requestSubmit();
+                }
+            }
+
+            messageMenu.style.display = "none";
+        });
+
+        document.addEventListener("click", function (event) {
+            if (!messageMenu.contains(event.target)) {
+                messageMenu.style.display = "none";
+            }
+        });
+
+        document.addEventListener("scroll", function () {
+            messageMenu.style.display = "none";
+        }, true);
+    </script>
+</body>
+
+</html>
