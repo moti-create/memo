@@ -21,7 +21,7 @@ def category_detail(request, category_id):
     category = Category.objects.get(id=category_id)
 
     if request.method == "POST":
-        content = request.POST.get("content")
+        content = request.POST.get("content","").strip()
 
         if content:
             Memo.objects.create(

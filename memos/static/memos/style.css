@@ -37,7 +37,6 @@ body {
 }
 
 /* 付箋1枚 */
-/* 付箋1枚 */
 .category-card {
     display: block;
     background-color: #f8e5a6;
@@ -58,8 +57,6 @@ body {
     flex-direction: column;
     align-items: flex-end;
     gap: 12px;
-    margin-top: 24px;
-    margin-bottom: 24px;
     padding-bottom: 100px;
     padding-top: 100px;
 }
@@ -68,16 +65,19 @@ body {
 .memo-bubble {
     background-color: #d9eed4;
     color: #333333;
-    padding: 12px 16px;
-    border-radius: 16px 16px 4px 16px;
-    max-width: 75%;
-    width: fit-content;
-    overflow-wrap: anywhere;
+    padding: 12px 12px;
+    border-radius: 18px 18px 4px 18px;
+    max-width: 90%;
+    overflow-wrap: break-word;
     white-space: pre-wrap;
-    box-sizing: border-box;
 }
 
-/* メッセージ入力欄 */
+/*日付の文字*/
+.memo-date {
+    font-size: 12px;
+    color: #6a6a6a;
+}
+
 /* メッセージ入力欄 */
 .message-form {
     display: flex;
@@ -179,3 +179,4 @@ body {
     border-radius: 10px;
     font: inherit;
 }
+

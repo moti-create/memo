@@ -29,12 +29,8 @@
     <div class="memo-list">
         {% for memo in memos %}
         <div class="memo-item">
-            <div class="memo-bubble" data-memo-id="{{ memo.id }}">
-                {{ memo.content }}
-            </div>
-            <div class="memo-date">
-                {{ memo.created_at|date:"Y/m/d H:i" }}
-            </div>
+            <div class="memo-bubble" data-memo-id="{{ memo.id }}">{{ memo.content }}</div>
+            <div class="memo-date"> {{ memo.created_at|date:"Y/m/d H:i" }}</div>
         </div>
         {% empty %}
         <p>
