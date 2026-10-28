@@ -127,9 +127,24 @@
                     bubble.classList.add("memo-selected");
                 }
 
-                messageMenu.style.left = event.clientX + "px";
-                messageMenu.style.top = event.clientY + "px";
+                // メニューを表示して大きさを取得
                 messageMenu.style.display = "block";
+
+                const menuWidth = messageMenu.offsetWidth;
+                const menuHeight = messageMenu.offsetHeight;
+
+                // 画面外にはみ出さない位置に調整
+                const left = Math.min(
+                    event.clientX,
+                    window.innerWidth - menuWidth
+                );
+                const top = Math.min(
+                    event.clientY,
+                    window.innerHeight - menuHeight
+                );
+
+                messageMenu.style.left = Math.max(0, left) + "px";
+                messageMenu.style.top = Math.max(0, top) + "px";
             });
         });
 
@@ -191,3 +206,4 @@
 </body>
 
 </html>
+```
