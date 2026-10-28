@@ -1,4 +1,4 @@
-
+```css
 /* ==========================
    共通設定
 ========================== */
@@ -109,13 +109,11 @@ form:has(input[placeholder="カテゴリー名"]) button:hover {
     padding: 20px;
     padding-bottom: 52px;
     box-sizing: border-box;
-
     background-color: #DCE9D6;
     border: 1px solid #B9CFB1;
     border-radius: 14px;
     box-shadow: 0 3px 10px #293F3210;
     color: #293F32;
-
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
@@ -187,17 +185,14 @@ form:has(input[placeholder="カテゴリー名"]) button:hover {
     right: -70px;
     top: -170px;
     z-index: 10;
-
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 6px;
-
     width: 240px;
     max-width: calc(100vw - 48px);
     padding: 10px;
     box-sizing: border-box;
-
     background-color: #DCE9D6;
     border: 1px solid #B9CFB1;
     border-radius: 10px;
@@ -212,7 +207,6 @@ form:has(input[placeholder="カテゴリー名"]) button:hover {
     min-width: 0;
     padding: 9px;
     box-sizing: border-box;
-
     border: 1px solid #B9CFB1;
     border-radius: 8px;
     background-color: #FFFFFF;
@@ -340,8 +334,6 @@ form:has(input[placeholder="カテゴリー名"]) button:hover {
     padding: 12px;
     box-sizing: border-box;
     overflow-wrap: anywhere;
-
-
     background-color: #DCE9D6;
     border: 1px solid #B9CFB1;
     border-radius: 18px 18px 4px 18px;
@@ -371,14 +363,12 @@ form:has(input[placeholder="カテゴリー名"]) button:hover {
     display: flex;
     gap: 8px;
     align-items: flex-end;
-
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
     padding: 12px 24px;
     box-sizing: border-box;
-
     background-color: #FFFFFF;
     border-top: 1px solid #E7EBE5;
     z-index: 100;
@@ -406,9 +396,10 @@ form:has(input[placeholder="カテゴリー名"]) button:hover {
     display: none;
     position: fixed;
     z-index: 1000;
-    min-width: 100px;
-    padding: 4px;
-
+    width: 70px;
+    min-width: 0;
+    padding: 3px;
+    box-sizing: border-box;
     background-color: #FFFFFF;
     border: 1px solid #D9DED5;
     border-radius: 10px;
@@ -426,6 +417,7 @@ form:has(input[placeholder="カテゴリー名"]) button:hover {
     text-align: left;
     font-size: 14px;
     cursor: pointer;
+    writing-mode: horizontal-tb;
 }
 
 .context-menu button:hover {
@@ -475,3 +467,4 @@ form:has(input[placeholder="カテゴリー名"]) button:hover {
         font-size: 12px;
     }
 }
+```
