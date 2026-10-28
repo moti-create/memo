@@ -1,4 +1,6 @@
+
 from django.shortcuts import render, redirect
+from django.db.models import Count
 from .models import Category, Memo
 
 
@@ -11,7 +13,11 @@ def home(request):
 
         return redirect("home")
 
-    categories = Category.objects.all()
+    # カテゴリーごとのメモ件数を取得
+    categories = Category.objects.annotate(
+        memo_count=Count("memo")
+    )
+
     return render(request, "memos/home.html", {
         "categories": categories
     })
@@ -21,7 +27,7 @@ def category_detail(request, category_id):
     category = Category.objects.get(id=category_id)
 
     if request.method == "POST":
-        content = request.POST.get("content","").strip()
+        content = request.POST.get("content", "").strip()
 
         if content:
             Memo.objects.create(
@@ -77,3 +83,14 @@ def delete_selected_memos(request, category_id):
         ).delete()
 
     return redirect("category_detail", category_id=category_id)
+
+def edit_category(request, category_id):
+    if request.method == "POST":
+        category = Category.objects.get(id=category_id)
+        name = request.POST.get("category_name", "").strip()
+
+        if name:
+            category.name = name
+            category.save()
+
+    return redirect("home")

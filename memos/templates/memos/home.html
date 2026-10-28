@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -12,32 +13,121 @@
 
 <body>
     <h1>Memo</h1>
-    <h2>マイカテゴリー</h2>
 
+    <!-- カテゴリー追加 -->
     <form method="POST">
         {% csrf_token %}
-        <input type="text" name="category_name" placeholder="カテゴリー名">
+        <input
+            type="text"
+            name="category_name"
+            placeholder="カテゴリー名"
+            maxlength="100"
+            required
+        >
         <button type="submit">追加</button>
     </form>
 
+    <!-- カテゴリー一覧 -->
     <div class="category-list">
         {% for category in categories %}
         <div class="category-item">
-            <a href="{% url 'category_detail' category.id %}" class="category-card">
-                {{ category.name }}
-            </a>
+            <div class="category-card">
 
-            <form method="POST" action="{% url 'delete_category' category.id %}"
-                onsubmit="return confirm('このカテゴリーと中のメッセージをすべて削除しますか？');">
-                {% csrf_token %}
-                <button type="submit">削除</button>
-            </form>
+                <!-- カテゴリー名とメモ件数 -->
+                <a href="{% url 'category_detail' category.id %}"
+                   class="category-link">
+                    <span class="category-name">{{ category.name }}</span>
+
+                    <span class="category-memo-count">
+                        {{ category.memo_count }}件のメモ
+                    </span>
+                </a>
+
+                <!-- カテゴリー名の編集 -->
+                <div class="category-edit-area">
+                    <button
+                        type="button"
+                        class="category-edit-button"
+                    >
+                        編集
+                    </button>
+
+                    <form
+                        method="POST"
+                        action="{% url 'edit_category' category.id %}"
+                        class="category-edit-form"
+                        style="display: none;"
+                    >
+                        {% csrf_token %}
+
+                        <input
+                            type="text"
+                            name="category_name"
+                            value="{{ category.name }}"
+                            maxlength="100"
+                            required
+                        >
+
+                        <button type="submit">保存</button>
+
+                        <button
+                            type="button"
+                            class="category-cancel-button"
+                        >
+                            キャンセル
+                        </button>
+                    </form>
+                </div>
+
+                <!-- カテゴリー削除 -->
+                <form
+                    method="POST"
+                    action="{% url 'delete_category' category.id %}"
+                    onsubmit="return confirm('このカテゴリーと中のメッセージをすべて削除しますか？');"
+                >
+                    {% csrf_token %}
+                    <button
+                        type="submit"
+                        class="category-delete-button"
+                    >
+                        削除
+                    </button>
+                </form>
+
+            </div>
         </div>
         {% empty %}
         <p>カテゴリーはまだありません。</p>
         {% endfor %}
     </div>
 
+    <!-- 編集・キャンセルの動作 -->
+    <script>
+        document.querySelectorAll(".category-item").forEach(item => {
+            const editButton = item.querySelector(".category-edit-button");
+            const cancelButton = item.querySelector(".category-cancel-button");
+            const editForm = item.querySelector(".category-edit-form");
+            const categoryName = item.querySelector(".category-name");
+            const input = editForm.querySelector('input[name="category_name"]');
+
+            editButton.addEventListener("click", () => {
+                categoryName.style.display = "none";
+                editButton.style.display = "none";
+                editForm.style.display = "flex";
+
+                input.focus();
+                input.select();
+            });
+
+            cancelButton.addEventListener("click", () => {
+                input.value = categoryName.textContent.trim();
+
+                categoryName.style.display = "";
+                editButton.style.display = "";
+                editForm.style.display = "none";
+            });
+        });
+    </script>
 </body>
 
 </html>

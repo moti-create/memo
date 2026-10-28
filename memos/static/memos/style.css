@@ -1,15 +1,68 @@
 
-/* ページ全体 */
+/* ==========================
+   共通設定
+========================== */
 
-/* ページ上部を固定 */
+body {
+    margin: 0;
+    padding: 24px;
+    background-color: #FFFFFF;
+    font-family: sans-serif;
+    color: #293F32;
+}
+
+/* 入力欄の共通デザイン */
+.message-form textarea,
+.memo-search input,
+form:has(input[placeholder="カテゴリー名"]) input {
+    box-sizing: border-box;
+    border: 1px solid #D5DED2;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+    color: #293F32;
+    font: inherit;
+}
+
+/* 入力欄のフォーカス */
+.message-form textarea:focus,
+.memo-search input:focus,
+form:has(input[placeholder="カテゴリー名"]) input:focus {
+    outline: none;
+    border-color: #789477;
+    box-shadow: 0 0 0 3px #78947725;
+}
+
+/* 緑色ボタンの共通デザイン */
+.message-form button,
+form:has(input[placeholder="カテゴリー名"]) button {
+    border: none;
+    border-radius: 12px;
+    background-color: #668568;
+    color: #FFFFFF;
+    font: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.message-form button:hover,
+form:has(input[placeholder="カテゴリー名"]) button:hover {
+    background-color: #4F7053;
+}
+
+/* ==========================
+   ページヘッダー
+========================== */
+
 .page-header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     box-sizing: border-box;
-    padding: 8px 24px 8px;
-    background-color: #ffffff;
+    padding: 12px 24px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E7EBE5;
     z-index: 100;
     display: flex;
     align-items: center;
@@ -18,67 +71,302 @@
 
 .page-header h1 {
     margin-top: 0;
-     margin-bottom: 8px;
+    margin-bottom: 8px;
+    color: #293F32;
 }
 
-body {
-    background-color: #ffffff;
-    font-family: sans-serif;
-    padding: 24px;
-}
+/* ==========================
+   カテゴリー一覧
+========================== */
 
-/* カテゴリー一覧 */
 .category-list {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(min(200px, 100%), 1fr)
+    );
+    align-items: start;
+    gap: 20px;
+    width: 100%;
+    margin-top: 24px;
+    box-sizing: border-box;
+}
+
+/* カテゴリー項目 */
+.category-item {
+    min-width: 0;
+    width: 100%;
+}
+
+/* カテゴリーカード */
+.category-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 180px;
+    min-width: 0;
+    padding: 20px;
+    padding-bottom: 52px;
+    box-sizing: border-box;
+
+    background-color: #DCE9D6;
+    border: 1px solid #B9CFB1;
+    border-radius: 14px;
+    box-shadow: 0 3px 10px #293F3210;
+    color: #293F32;
+
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.category-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 16px #293F321A;
+}
+
+/* カテゴリー名とメモ件数 */
+.category-link {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+}
+
+/* カテゴリー名 */
+.category-name {
+    font-size: 20px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+/* メモ件数 */
+.category-memo-count {
+    margin-top: 20px;
+    font-size: 13px;
+    font-weight: normal;
+    color: #526B50;
+}
+
+/* ==========================
+   編集・削除ボタン
+========================== */
+
+/* 編集エリアをカード右下に配置 */
+.category-edit-area {
+    position: absolute;
+    right: 66px;
+    bottom: 10px;
+    z-index: 6;
+    max-width: calc(100% - 100px);
+    box-sizing: border-box;
+}
+
+/* 編集ボタン */
+.category-edit-button {
+    display: block;
+    padding: 5px 10px;
+    border: 1px solid #B9CFB1;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    color: #526B50;
+    font: inherit;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.category-edit-button:hover {
+    background-color: #F0F5ED;
+}
+
+/* 編集フォーム */
+.category-edit-form {
+    position: absolute;
+    right: -70px;
+    top: -170px;
+    z-index: 10;
+
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 16px;
-    margin-top: 20px;
-}
+    align-items: center;
+    gap: 6px;
 
-/* 付箋1枚 */
-.category-card {
-    display: block;
-    background-color: #f8e5a6;
-    width: 150px;
-    min-height: 100px;
-    padding: 16px;
+    width: 240px;
+    max-width: calc(100vw - 48px);
+    padding: 10px;
     box-sizing: border-box;
-    border-radius: 4px;
-    box-shadow: 2px 4px 8px #00000018;
-    text-decoration: none;
-    color: inherit;
+
+    background-color: #DCE9D6;
+    border: 1px solid #B9CFB1;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px #293F3220;
 }
 
+/* 編集用入力欄 */
+.category-edit-form input {
+    display: block;
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 0;
+    padding: 9px;
+    box-sizing: border-box;
 
-/* メッセージ一覧 */
+    border: 1px solid #B9CFB1;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    color: #293F32;
+    font: inherit;
+    font-size: 14px;
+}
+
+.category-edit-form input:focus {
+    outline: none;
+    border-color: #789477;
+    box-shadow: 0 0 0 3px #78947725;
+}
+
+/* 保存・キャンセルボタン */
+.category-edit-form button {
+    flex: 0 0 auto;
+    padding: 6px 10px;
+    border: 1px solid #B9CFB1;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    color: #293F32;
+    font: inherit;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.category-edit-form button:hover {
+    background-color: #F0F5ED;
+}
+
+.category-cancel-button {
+    white-space: nowrap;
+}
+
+/* カテゴリー削除フォーム */
+.category-card > form[action*="/delete/"] {
+    position: absolute;
+    right: 12px;
+    bottom: 10px;
+    margin: 0;
+    z-index: 2;
+}
+
+/* 削除ボタン */
+.category-delete-button {
+    padding: 5px 10px;
+    border: 1px solid #B9CFB1;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    color: #526B50;
+    font: inherit;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.category-delete-button:hover {
+    background-color: #F8EAE6;
+    color: #984D42;
+}
+
+/* ==========================
+   カテゴリー追加フォーム
+========================== */
+
+form:has(input[placeholder="カテゴリー名"]) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+    margin-bottom: 24px;
+}
+
+/* カテゴリー名入力欄 */
+form:has(input[placeholder="カテゴリー名"]) input {
+    width: 280px;
+    max-width: 100%;
+    padding: 11px 15px;
+    box-shadow: 0 2px 5px #293F3208;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* カテゴリー追加ボタン */
+form:has(input[placeholder="カテゴリー名"]) button {
+    padding: 11px 20px;
+    box-shadow: 0 3px 7px #293F3218;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+form:has(input[placeholder="カテゴリー名"]) button:hover {
+    transform: translateY(-2px);
+}
+
+/* ==========================
+   メモ一覧
+========================== */
+
 .memo-list {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    gap: 12px;
-    padding-bottom: 100px;
+    align-items: stretch;
+    gap: 16px;
     padding-top: 100px;
+    padding-bottom: 100px;
 }
 
-/* メッセージの吹き出し */
+/* メモと日付 */
+.memo-item {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* メモの吹き出し */
 .memo-bubble {
-    background-color: #d9eed4;
-    color: #333333;
-    padding: 12px 12px;
+    width: fit-content;
+    max-width: 80%;
+    padding: 12px;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+
+
+    background-color: #DCE9D6;
+    border: 1px solid #B9CFB1;
     border-radius: 18px 18px 4px 18px;
-    max-width: 90%;
-    overflow-wrap: break-word;
-    white-space: pre-wrap;
+    box-shadow: 0 2px 6px #293F320D;
+    color: #293F32;
 }
 
-/*日付の文字*/
+/* メモの日付 */
 .memo-date {
+    flex-shrink: 0;
+    order: -1;
     font-size: 12px;
-    color: #6a6a6a;
+    color: #626B60;
 }
 
-/* メッセージ入力欄 */
+/* 選択中のメモ */
+.memo-bubble.memo-selected {
+    outline: 3px solid #668568;
+    outline-offset: 2px;
+}
+
+/* ==========================
+   メモ入力フォーム
+========================== */
+
 .message-form {
     display: flex;
     gap: 8px;
@@ -90,55 +378,41 @@ body {
     width: 100%;
     padding: 12px 24px;
     box-sizing: border-box;
-    background-color: #ffffff;
+
+    background-color: #FFFFFF;
+    border-top: 1px solid #E7EBE5;
     z-index: 100;
 }
 
-/* 入力欄 */
+/* メモ入力欄 */
 .message-form textarea {
     flex: 1;
     min-width: 0;
     min-height: 44px;
     padding: 12px;
-    border: 1px solid #cccccc;
-    border-radius: 12px;
-    font: inherit;
     resize: vertical;
-    box-sizing: border-box;
 }
 
 /* 投稿ボタン */
 .message-form button {
     padding: 12px 18px;
-    border: none;
-    border-radius: 12px;
-    background-color: #9dcc91;
-    color: #243321;
-    font: inherit;
-    cursor: pointer;
 }
 
-/* 付箋と削除ボタンをまとめる */
-.category-item {
-    width: 150px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-}
+/* ==========================
+   右クリックメニュー
+========================== */
 
-
-/* 右クリックメニュー */
 .context-menu {
     display: none;
     position: fixed;
     z-index: 1000;
-    background-color: #ffffff;
-    border: 1px solid #dddddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px #00000020;
-    padding: 4px;
     min-width: 100px;
+    padding: 4px;
+
+    background-color: #FFFFFF;
+    border: 1px solid #D9DED5;
+    border-radius: 10px;
+    box-shadow: 0 5px 16px #293F3220;
 }
 
 /* メニュー内の削除項目 */
@@ -146,23 +420,21 @@ body {
     width: 100%;
     padding: 10px 16px;
     border: none;
-    border-radius: 5px;
+    border-radius: 7px;
     background: transparent;
-    color: #c0392b;
+    color: #A34F45;
     text-align: left;
     font-size: 14px;
     cursor: pointer;
 }
 
 .context-menu button:hover {
-    background-color: #fff0ee;
+    background-color: #FBECE7;
 }
 
-/* 複数選択中のメモ */
-.memo-bubble.memo-selected {
-    outline: 3px solid #6b9e5d;
-    outline-offset: 2px;
-}
+/* ==========================
+   メモ検索
+========================== */
 
 .memo-search {
     display: flex;
@@ -171,12 +443,35 @@ body {
     margin: 0;
 }
 
+/* 検索入力欄 */
 .memo-search input {
     width: 180px;
     min-width: 0;
-    padding: 8px 10px;
-    border: 1px solid #cccccc;
-    border-radius: 10px;
-    font: inherit;
+    padding: 9px 12px;
 }
 
+/* ==========================
+   狭い画面への対応
+========================== */
+
+@media (max-width: 450px) {
+    body {
+        padding: 16px;
+    }
+
+    .category-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .category-edit-form {
+        width: 220px;
+        max-width: calc(100vw - 32px);
+        padding: 8px;
+        gap: 5px;
+    }
+
+    .category-edit-form button {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+}
